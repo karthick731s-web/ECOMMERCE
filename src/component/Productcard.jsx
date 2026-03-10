@@ -2,21 +2,20 @@ import { A, B, C, D, E } from "../assets/image/images.jsx";
 import { v4 as uuid } from "uuid";
 import { useEffect, useState } from "react";
 import {Link} from 'react-router-dom';
+import { withBrand } from './withbrand.jsx';
 
-
-export const Productcard = ({
+const Productcard = ({
   pn,
   price,
   offer,
   rate,
   ratecount,
-  pi
+  pi,id
 }) => {
  return (
     <>
       <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
         <div className="h-56 w-full">
-          <a href="#">
             <img
               className="mx-auto h-full dark:hidden"
               src={pi}
@@ -27,7 +26,6 @@ export const Productcard = ({
               src={pi}
               alt=""
             />
-          </a>
         </div>
         <div className="pt-6">
           <div className="mb-4 flex items-center justify-between gap-4">
@@ -209,7 +207,7 @@ export const Productcard = ({
             <p className="text-2xl font-extrabold leading-tight text-gray-900 dark:text-white">
               {price}
             </p>
-            <Link to="/product">
+            <Link to={`/product/${id}`}>
             <button
               type="button"
               className="inline-flex items-center rounded-lg bg-primary-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4  focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
@@ -242,47 +240,4 @@ export const Productcard = ({
   );
 }
 
-export const Product = () => {
-
-
-    const [products, setProducts] = useState([]);
-
-  useEffect(() => {
-    fetchProducts();
-  }, []);
-
-  const fetchProducts = async () => {
-    try {
-      const res = await fetch("https://dummyjson.com/products");
-      const data = await res.json();
-      // log fetched products for debugging
-      console.log("fetched products:", data.products );
-      setProducts(data.products);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-  return (
-    <>
-      <section className="bg-gray-50 dark:bg-gray-900">
-        <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24 
-grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-      {products.map((i) => (
-  <Productcard 
-    key={i.id}  
-    pn={i.title}
-    price={i.price}
-    offer={i.discountPercentage}
-    rate={i.rating}
-    ratecount={i.stock}
-    pi={i.thumbnail}
-  />
-))}
-
-        </div>
-      </section>
-
-    </>
-  );
-}
-
+export const ProductWithBrand = withBrand(Productcard);
